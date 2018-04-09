@@ -1,0 +1,101 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="my-pokecard.html">
+
+<dom-module id="my-app">
+  <template>
+    <style>
+      :host {
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+      }
+    </style>
+    <iron-ajax
+      auto
+      id="prueba"
+      url="https://pokeapi.co/api/v2/pokemon/1"
+      handle-as="json"
+      on-response="pruebaresponse"
+      on-error="pruebaerror"
+      last-response="{{pruebapoke}}">
+    </iron-ajax>
+    <iron-ajax
+      id="infoPokemon"
+      handle-as="json"
+      on-response="_pokemonResponse"
+      on-error="_pokemonError"
+      last-response="{{pokemon}}">
+    </iron-ajax>
+    <p>dsadsa</p>
+
+    <paper-input label="Nombre o Numero">
+      <paper-icon-button slot="suffix" icon="search" >
+      </paper-icon-button>
+    </paper-input>
+    
+    <div class="cards">
+      <my-pokecard></my-pokecard>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MyApp extends Polymer.Element {
+      static get is() { return 'my-app'; }
+      static get properties() {
+        return {
+          count: {
+            type: Number,
+            value: 12
+          },
+          pokemonArray:{
+            type: Array,
+            notify: true,
+            value: []
+          }
+        }
+      }
+      connectedCallback() {
+        super.connectedCallback()
+        console.log('component created')
+      }
+      ready (){
+        super.ready()
+        this._buildCards()
+      }
+      pruebaresponse (){
+        var a="";
+      }
+      _buildCards (){
+        for(let i=1; i<=this.count; i++){
+          this.$.infoPokemon.url = 'https://pokeapi.co/api/v2/pokemon/' + i 
+          this.$.infoPokemon.generateRequest();
+        }
+      }
+      _pokemonResponse (event) {
+        const pokemon = {
+          name: event.detail.response.forms[0].name,
+          url: event.detail.response.forms[0].url
+        }
+        this.pokemonArray.push(pokemon)
+      }
+      _pokemonError (event) {
+        console.log(event.detail.request.xhr.response)
+        let b="error"
+      }
+    }
+
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>

@@ -1,0 +1,30 @@
+<dom-module id="my-pokecard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+   POKEMON GO
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MyPokeCard extends Polymer.Element {
+      static get is() { return 'my-pokecard'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'my-app'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(MyPokeCard.is, MyPokeCard);
+  </script>
+</dom-module>
